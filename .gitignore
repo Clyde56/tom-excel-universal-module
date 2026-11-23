@@ -1,0 +1,38 @@
+# Dependencies — install with `npm install` instead of committing
+**/node_modules/
+**/npm-debug.log*
+**/yarn-error.log*
+
+# Bundled Microsoft Office icon resources (copyright, not redistributed here)
+**/ICO/
+**/icons/
+
+# Build outputs
+electron/dist-electron/
+electron/out/
+*.exe
+*.msi
+*.deb
+*.dmg
+*.AppImage
+*.blockmap
+
+# Runtime / user data
+*.log
+*.orig
+ai-settings.json
+unsupported-imageMso.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Python
+__pycache__/
+*.pyc
+
+# Keep these intentionally:
+# electron/dist/           (application implementation)

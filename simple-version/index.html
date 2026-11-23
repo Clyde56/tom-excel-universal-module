@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>汤姆EXCEL万能模块</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div id="boot-screen">
+  <div class="boot-logo">🦀</div>
+  <strong>汤姆EXCEL万能模块</strong>
+  <span>正在加载设计器...</span>
+</div>
+
+<div id="app" class="app-shell" hidden>
+  <!-- 顶部栏 -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-logo">🦀</div>
+      <div class="brand-text">
+        <span class="eyebrow">TOM EXCEL · RIBBON DESIGNER</span>
+        <h1>汤姆EXCEL万能模块</h1>
+      </div>
+    </div>
+
+    <div class="workspace-switch" role="group" aria-label="切换工作区">
+      <button class="ws-btn active" data-ws="excel">Excel</button>
+      <button class="ws-btn" data-ws="word">Word</button>
+      <button class="ws-btn" data-ws="jsa">JS宏</button>
+    </div>
+
+    <div class="topbar-actions">
+      <button id="btn-theme" class="icon-btn" title="切换深色/浅色">🌙</button>
+      <button id="btn-reset" class="ghost-btn" title="重置为示例设计">重置示例</button>
+      <button id="btn-settings" class="ghost-btn">⚙ AI 配置</button>
+      <button id="btn-import" class="primary-btn">📂 导入工作簿</button>
+      <button id="btn-save-xml" class="ghost-btn">💾 导出 XML</button>
+      <button id="btn-save-workbook" class="primary-btn accent">⬇ 另存工作簿</button>
+    </div>
+  </header>
+
+  <!-- 文件信息条 -->
+  <div class="file-strip">
+    <span class="fs-label">当前文件</span>
+    <span id="fs-file" class="fs-file">尚未导入 · 使用内置示例设计</span>
+    <span id="fs-status" class="fs-status ok">示例数据</span>
+    <span id="fs-macro-count" class="fs-meta">宏 0 个</span>
+    <span class="fs-spacer"></span>
+    <span class="fs-hint">支持拖拽 .xlsm / .xlam / .docm 文件到窗口导入</span>
+  </div>
+
+  <!-- 三栏工作区 -->
+  <main class="workspace">
+    <!-- 左：结构树 -->
+    <section class="panel tree-panel">
+      <div class="panel-header">
+        <div><h2>Ribbon 结构</h2><p>组织选项卡、分组与控件</p></div>
+        <div class="panel-actions">
+          <button id="btn-add-tab" class="mini-btn" title="新建选项卡">+ Tab</button>
+        </div>
+      </div>
+      <div class="tree-toolbar">
+        <input id="tree-filter" class="search-input" placeholder="筛选结构..." />
+        <select id="bind-filter" class="mini-select" aria-label="绑定状态筛选">
+          <option value="all">全部</option>
+          <option value="bound">已绑定</option>
+          <option value="unbound">未绑定</option>
+        </select>
+      </div>
+      <div id="ribbon-tree" class="tree-list"></div>
+      <div class="panel-footer">
+        <button id="btn-expand-all" class="link-btn">展开全部</button>
+        <button id="btn-collapse-all" class="link-btn">折叠全部</button>
+      </div>
+    </section>
+
+    <div class="splitter" data-split="left"></div>
+
+    <!-- 中：预览 + 底部 -->
+    <div class="center-column">
+      <section class="panel preview-panel">
+        <div class="panel-header">
+          <div><h2>功能区预览</h2><p>接近真实 Office Ribbon 的布局</p></div>
+          <div class="panel-actions">
+            <button id="btn-refresh" class="mini-btn" title="刷新宏列表">🔄 刷新</button>
+            <button id="btn-fill-icons" class="mini-btn" title="随机补全缺失图标">🎨 补全图标</button>
+          </div>
+        </div>
+        <div id="ribbon-preview" class="ribbon-preview"></div>
+      </section>
+
+      <section class="panel bottom-panel">
+        <div class="bottom-tabs">
+          <button class="bottom-tab active" data-tab="xml">XML 预览</button>
+          <button class="bottom-tab" data-tab="issues">校验结果 <span id="issue-badge" class="badge">0</span></button>
+          <button class="bottom-tab" data-tab="macros">宏过程 <span id="macro-badge" class="badge">0</span></button>
+          <span class="fs-spacer"></span>
+          <button id="btn-copy-xml" class="link-btn">复制 XML</button>
+        </div>
+        <div id="bottom-content" class="bottom-content"></div>
+      </section>
+    </div>
+
+    <div class="splitter" data-split="right"></div>
+
+    <!-- 右：属性 / AI -->
+    <aside class="panel inspector-panel">
+      <div class="inspector-switch">
+        <button class="inspector-tab active" data-mode="inspector">属性与绑定</button>
+        <button class="inspector-tab" data-mode="ai">AI 设计</button>
+      </div>
+      <div id="inspector-content" class="inspector-content"></div>
+      <div id="ai-content" class="inspector-content" hidden></div>
+    </aside>
+  </main>
+
+  <div id="toast" class="toast" hidden></div>
+  <div id="busy" class="busy-overlay" hidden><div class="busy-card"><div class="spinner"></div><span id="busy-text">处理中...</span></div></div>
+  <div id="modal-root"></div>
+  <input type="file" id="file-input" accept=".xlsm,.xlam,.docm,.dotm" hidden />
+</div>
+
+<!-- 使用构建生成的普通脚本 bundle.js（内联全部数据与模块），可在 file:// 下直接打开 -->
+<script src="js/bundle.js"></script>
+</body>
+</html>

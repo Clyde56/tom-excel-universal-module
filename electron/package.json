@@ -1,0 +1,49 @@
+{
+  "name": "tom-excel-universal-module",
+  "displayName": "汤姆EXCEL万能模块",
+  "version": "1.0.9",
+  "description": "A desktop Ribbon XML designer for Excel .xlsm and .xlam macro files (open-source fork).",
+  "author": "Tom Excel Module contributors (fork of jerry-office/jr-ribbon-xml-editor)",
+  "license": "Apache-2.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/main/main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder",
+    "dist:win": "electron-builder --win",
+    "dist:linux": "electron-builder --linux"
+  },
+  "build": {
+    "appId": "com.tomexcel.module",
+    "productName": "汤姆EXCEL万能模块",
+    "files": [
+      "dist/**/*",
+      "ICO/**/*",
+      "package.json"
+    ],
+    "asar": {
+      "smartUnpack": true
+    },
+    "win": {
+      "target": "nsis",
+      "artifactName": "汤姆EXCEL万能模块-${version}-setup.${ext}"
+    },
+    "linux": {
+      "target": "AppImage",
+      "category": "Office"
+    }
+  },
+  "devDependencies": {
+    "electron": "^32.0.0",
+    "electron-builder": "^24.13.0"
+  },
+  "dependencies": {
+    "adm-zip": "^0.5.17",
+    "cfb": "^1.2.2",
+    "fast-xml-parser": "^5.8.0",
+    "iconv-lite": "^0.7.2",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6"
+  }
+}

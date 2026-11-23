@@ -1,0 +1,37 @@
+汤姆EXCEL万能模块 (Tom Excel Universal Module)
+Copyright 2026 Tom Excel Module contributors
+
+This product includes software developed by jerry-office
+(jr-ribbon-xml-editor, version 1.0.9), licensed under the Apache License,
+Version 2.0. The original work's copyright and attribution are retained.
+
+    Original project: jr-ribbon-xml-editor
+    Original author:  jerry-office
+    Original license: Apache License 2.0
+
+Modifications made in this fork:
+  - Renamed the application and all brand identifiers from
+    "杰瑞Ribbon设计器 / JR Ribbon" to "汤姆EXCEL万能模块 / TOM EXCEL".
+  - Replaced branding identifiers in source (window bridge object,
+    VBA callback module name, storage keys, installer package names,
+    failure markers, environment variables).
+  - Removed the original author's personal website and donation QR code
+    from the user interface; replaced with neutral open-source notices.
+  - Added open-source repository structure (README, LICENSE, NOTICE,
+    .gitignore) and an alternative zero-dependency Web implementation.
+
+Third-party components bundled with the original application:
+  - adm-zip       (MIT License)
+  - cfb / SheetJS (Apache-2.0)
+  - iconv-lite    (MIT License)
+  - fast-xml-parser (MIT License)
+  - React / ReactDOM (MIT License)
+  - Electron      (MIT License)
+
+The ICO directory contains Office imageMso icon resources derived from
+Microsoft Office. Rights to those icons belong to Microsoft Corporation.
+This repository includes them for technical compatibility only; obtain
+appropriate licensing before commercial redistribution.
+
+This product is released for technical research and open-source learning.
+All rights to the original work remain with the original author.

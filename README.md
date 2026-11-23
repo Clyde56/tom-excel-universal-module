@@ -82,3 +82,22 @@ copy build/app.asar build/汤姆EXCEL万能模块/resources/app.asar
 - **授权**：本项目沿用 Apache License 2.0，完整条款见 [LICENSE](LICENSE)，归属声明见 [NOTICE](NOTICE)
 
 本项目为技术研究与开源学习目的发布。原项目的所有权利归原作者所有。若原作者不希望本项目继续发布，请联系维护者，我们将及时下架。
+
+---
+
+## 自动打包与 Release（GitHub Actions）
+
+仓库已配置 `.github/workflows/release.yml`，在以下情况自动运行：
+
+- **推送版本 tag**：`git tag v1.0.10 && git push origin v1.0.10`
+- **手动触发**：在 GitHub 仓库 Actions 页面点 "Run workflow"
+
+工作流会自动完成：
+
+1. 检出源码、安装 Node 20 与依赖
+2. 用 `@electron/asar` 打包出 `app.asar`
+3. 组装 Windows / Linux 两个压缩包
+4. 从上一个 tag 到当前 tag 的 commit 生成**更新日志**
+5. 创建 GitHub Release 并上传压缩包
+
+> Release 压缩包只含应用代码（app.asar）。因体积与版权原因，Electron 运行时与 Office 图标未包含，需按 README 自行准备——这与「来源与授权说明」一致。

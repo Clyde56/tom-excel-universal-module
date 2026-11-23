@@ -1,0 +1,93 @@
+name: 打包并发布 Release
+
+on:
+  push:
+    tags:
+      - 'v*'          # 推送 v1.0.9 这类 tag 时触发
+  workflow_dispatch:  # 也支持在 Actions 页面手动触发
+
+permissions:
+  contents: write     # 创建 Release 需要写权限
+
+jobs:
+  release:
+    name: 构建并发布
+    runs-on: ubuntu-latest   # 在 Linux 上同时打两个平台的包（都是纯文件打包）
+
+    steps:
+      - name: 检出源码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # 拉取完整历史，用于生成更新日志
+
+      - name: 安装 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 准备构建环境
+        # ICO/图标因版权未入库；npm 依赖仅用于 asar 打包时校验结构
+        run: |
+          mkdir -p electron/ICO/Excel2019 electron/ICO/Word2019
+          echo "Placeholder icon resources - original Office icons not redistributed." > electron/ICO/README.md
+          cd electron && npm install --ignore-scripts && cd ..
+
+      - name: 打包 app.asar
+        run: npx --yes @electron/asar pack electron app.asar
+
+      - name: 组装 Windows 包
+        run: |
+          VER="${GITHUB_REF_NAME}"
+          WIN="tom-excel-module-${VER}-win"
+          mkdir -p "$WIN/resources"
+          cp app.asar "$WIN/resources/app.asar"
+          cp electron/package.json "$WIN/"
+          printf '@echo off\r\necho 汤姆EXCEL万能模块 %s\r\nstart "" "汤姆EXCEL万能模块.exe"\r\n' "$VER" > "$WIN/启动应用.bat"
+          printf '注意：本压缩包仅含应用代码(app.asar)。请自行准备 Electron 运行时 exe 与 DLL，或将 app.asar 放入已安装的 Electron resources 目录。\n' > "$WIN/README.txt"
+          zip -r "$WIN.zip" "$WIN"
+
+      - name: 组装 Linux 包
+        run: |
+          VER="${GITHUB_REF_NAME}"
+          LIN="tom-excel-module-${VER}-linux"
+          mkdir -p "$LIN/resources"
+          cp app.asar "$LIN/resources/app.asar"
+          cp electron/package.json "$LIN/"
+          printf '#!/bin/sh\necho "Tom Excel Universal Module %s"\n' "$VER" > "$LIN/start.sh"
+          chmod +x "$LIN/start.sh"
+          printf 'Note: this archive contains app.asar only. Provide your own Electron runtime.\n' > "$LIN/README.txt"
+          zip -r "$LIN.zip" "$LIN"
+
+      - name: 生成更新日志
+        id: changelog
+        run: |
+          VER="${GITHUB_REF_NAME}"
+          PREV=$(git describe --tags --abbrev=0 "${VER}^" 2>/dev/null || echo "")
+          {
+            echo "## 汤姆EXCEL万能模块 $VER"
+            echo ""
+            if [ -n "$PREV" ]; then
+              echo "自 \`$PREV\` 以来的变更："
+              echo ""
+              git log --pretty=format:'- %s (%h)' "$PREV..$VER"
+            else
+              echo "首个发布版本。完整记录见仓库提交历史。"
+            fi
+            echo ""
+            echo ""
+            echo "### 下载说明"
+            echo "- \`-win.zip\` / \`-linux.zip\`：应用代码包（app.asar）。因体积与版权原因，未包含 Electron 运行时与 Office 图标；请按 README 自行准备。"
+          } > CHANGELOG.md
+          cat CHANGELOG.md
+
+      - name: 创建 Release 并上传
+        uses: softprops/action-gh-release@v2
+        with:
+          name: 汤姆EXCEL万能模块 ${{ github.ref_name }}
+          body_path: CHANGELOG.md
+          generate_release_notes: true
+          files: |
+            tom-excel-module-*-win.zip
+            tom-excel-module-*-linux.zip
+          draft: false
+          prerelease: false
